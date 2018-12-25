@@ -5,9 +5,23 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ImageAvatars from '../../Avatar'
 //import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LanguageDialog from './LangDialog';
 
 class UserMenuItems extends React.Component {
+    state = {
+        openLanguageDialog: false,
+        selectedValue: "English"
+    };
+
+    handleLanguageMenuOpen = event => {
+        console.log("lang menu open");
+        this.setState({ openLanguageDialog: true });
+    };
+
+    handleClose = value => {
+        this.setState({ selectedValue: value, openLanguageDialog: false });
+    };
 
     //<ImageAvatars src={user.image} className="user-pic" alt="" /> {user.username}
     render() {
@@ -27,24 +41,23 @@ class UserMenuItems extends React.Component {
                 <MenuItem onClick={menuClose}>
                     <NavLink to="/profile" exact className="nav-link">
                         <Button size="small" className={classes.margin}>
-                            My Account
+                            <FontAwesomeIcon icon="user" size="2x" />&nbsp;My Account
                         </Button>
                     </NavLink>
                 </MenuItem>
-                
+                <MenuItem onClick={menuClose}>
+                    <Button size="small" className={classes.margin} onClick={this.handleLanguageMenuOpen}>
+                        <FontAwesomeIcon icon="language" size="2x" />&nbsp;Language ({this.state.selectedValue})
+                    </Button> 
+                    <LanguageDialog onClose={this.handleClose} openLangDialog={this.state.openLanguageDialog} fullScreen={false} classes={classes} selectedValue={this.state.selectedValue}></LanguageDialog>
+                </MenuItem>
                 <MenuItem onClick={menuClose}><NavLink to="/logout" exact className="nav-link">
                     <Button size="small" className={classes.margin}>
-                        Logout
+                    <FontAwesomeIcon icon="sign-out-alt" size="2x" />&nbsp;Logout
                     </Button></NavLink>
                 </MenuItem>
-                <MenuItem onClick={menuClose}>
-                    <NavLink to="/changeLanguage" className="nav-link">
-                        <Button size="small" className={classes.margin}>
-                            <FontAwesomeIcon icon="language" />Language
-                        </Button> 
-                    </NavLink>
-                </MenuItem>
             </Menu>
+            
         );
     }
 }

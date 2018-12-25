@@ -10,8 +10,8 @@ import Register from './Register'
 import Settings from './Settings'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faIgloo, faCheckSquare, faCoffee, faCut, faUser, faGifts, faUserCircle, faRocket, faMoneyBillAlt, faCalendarCheck, faWrench, faCarrot, faHome, faLanguage} from '@fortawesome/free-solid-svg-icons'
-library.add(fab, faIgloo, faCheckSquare, faCoffee, faCut, faUser, faGifts , faUserCircle, faRocket, faMoneyBillAlt, faCalendarCheck, faWrench, faCarrot, faHome, faLanguage)
+import { faIgloo, faCheckSquare, faCoffee, faCut, faUser, faGifts, faUserCircle, faRocket, faMoneyBillAlt, faCalendarCheck, faWrench, faCarrot, faHome, faLanguage, faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
+library.add(fab, faIgloo, faCheckSquare, faCoffee, faCut, faUser, faGifts , faUserCircle, faRocket, faMoneyBillAlt, faCalendarCheck, faWrench, faCarrot, faHome, faLanguage, faSignOutAlt)
 
 const App = () => (
   <ApolloProvider client={apolloClient}>

@@ -21,21 +21,21 @@ class GuestMenuItems extends React.Component {
                 <MenuItem onClick={menuClose}>
                     <NavLink to="/login" exact className="nav-link">
                         <Button size="small" className={classes.margin}>
-                        <FontAwesomeIcon icon="user" />&nbsp;Sign In
+                        <FontAwesomeIcon icon="user" size="2x"/>&nbsp;Sign In
                         </Button>
                     </NavLink>
                 </MenuItem>
                 <MenuItem onClick={menuClose}>
                     <NavLink to="/register" className="nav-link">
                         <Button size="small" className={classes.margin}>
-                            <FontAwesomeIcon icon="user" />&nbsp;Sign up 
+                            <FontAwesomeIcon icon="user" size="2x"/>&nbsp;Sign up 
                         </Button> 
                     </NavLink>
                 </MenuItem>
                 <MenuItem onClick={menuClose}>
                     <NavLink to="/changeLanguage" className="nav-link">
                         <Button size="small" className={classes.margin}>
-                            <FontAwesomeIcon icon="language" />&nbsp;Language
+                            <FontAwesomeIcon icon="language" size="2x"/>&nbsp;Language
                         </Button> 
                     </NavLink>
                 </MenuItem>

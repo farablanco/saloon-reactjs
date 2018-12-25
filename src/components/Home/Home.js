@@ -32,21 +32,21 @@ const styles = theme => ({
   });
 
   let id = 0;
-  function createData(name, calories, fat, carbs, protein) {
+  function createData(employee, customer, datetime, status) {
     id += 1;
-    return { id, name, calories, fat, carbs, protein };
+    return { id, employee, customer, datetime, status };
   }
 
 class Home extends Component {
 
     state = {
         rows: [
-            createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-            createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-            createData('Eclair', 262, 16.0, 24, 6.0),
-            createData('Cupcake', 305, 3.7, 67, 4.3),
-            createData('Gingerbread', 356, 16.0, 49, 3.9),
-        ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
+            createData('Employee A', 'Customer A', '24-12-2018 11:00', 'confirm'),
+            createData('Employee B', 'Customer A', '24-12-2018 12:00', 'confirm'),
+            createData('Employee C', 'Customer A', '24-12-2018 13:00', 'confirm'),
+            createData('Employee D', 'Customer A', '24-12-2018 14:00', 'confirm'),
+            createData('Employee E', 'Customer A', '24-12-2018 15:00', 'confirm'),
+        ].sort((a, b) => (a.datetime < b.datetime ? -1 : 1)),
         page: 0,
         rowsPerPage: 15,
     }
@@ -79,11 +79,10 @@ class Home extends Component {
             
             <TableHead>
             <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat (g)</TableCell>
-                <TableCell align="right">Carbs (g)</TableCell>
-                <TableCell align="right">Protein (g)</TableCell>
+                <TableCell align="right">Employee Name</TableCell>
+                <TableCell align="right">Customer Name</TableCell>
+                <TableCell align="right">Booking Datetime</TableCell>
+                <TableCell align="right">Status</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -91,12 +90,11 @@ class Home extends Component {
                 return (
                 <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.employee}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell align="right">{row.customer}</TableCell>
+                    <TableCell align="right">{row.datetime}</TableCell>
+                    <TableCell align="right">{row.status}</TableCell>
                 </TableRow>
                 );
             })}
@@ -116,7 +114,7 @@ class Home extends Component {
               {rows.length > 0 ? (  
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
+                  colSpan={4}
                   count={rows.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
@@ -125,8 +123,7 @@ class Home extends Component {
                   }}
                   onChangePage={this.handleChangePage}
                   onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
+                  ActionsComponent={TablePaginationActions}/>
                 ):(
                     <Fragment/>
                 )}

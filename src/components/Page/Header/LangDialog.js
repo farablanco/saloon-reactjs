@@ -1,63 +1,74 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+//import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Avatar from '@material-ui/core/Avatar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+//import PersonIcon from '@material-ui/icons/Person';
+//import { withStyles } from '@material-ui/core/styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class ResponsiveDialog extends React.Component {
+const languages = ['English', '中文'];
+
+
+class LanguageDialog extends React.Component {
+
   state = {
     open: false,
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleClose = () => {
+    this.props.onClose(this.props.selectedValue);
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleListItemClick = value => {
+    //this.state.open = false;
+    this.props.onClose(value);
   };
 
   render() {
-    const { fullScreen } = this.props;
-
+    const { fullScreen, openLangDialog, classes } = this.props;
+    console.log(openLangDialog);
+    console.log(fullScreen);
     return (
       <div>
-        <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-          Open responsive dialog
-        </Button>
         <Dialog
           fullScreen={fullScreen}
-          open={this.state.open}
-          onClose={this.handleClose}
+          open={openLangDialog}
+          onClose={this.handleClose} 
           aria-labelledby="responsive-dialog-title"
         >
-          <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
+          <DialogTitle id="responsive-dialog-title">{"Change language ?"}</DialogTitle>
+          <div>
+          <List>
+            {languages.map(lang => (
+              <ListItem button onClick={() => this.handleListItemClick(lang)} key={lang}>
+                <ListItemAvatar>
+                  <Avatar className={classes.avatar}>
+                    <FontAwesomeIcon icon="language" size="2x" />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={lang} />
+              </ListItem>
+            ))}
+          </List>
+          </div>
         </Dialog>
       </div>
     );
   }
 }
 
-ResponsiveDialog.propTypes = {
+LanguageDialog.propTypes = {
   fullScreen: PropTypes.bool.isRequired,
+  classes: PropTypes.object.isRequired,
+  onClose: PropTypes.func,
+  selectedValue: PropTypes.string,
 };
 
-export default withMobileDialog()(ResponsiveDialog);
+export default LanguageDialog;

@@ -152,6 +152,7 @@ const styles = theme => ({
     state = {
       open: false,
       anchorEl: null,
+      openLanguageDialog: false
     };
   
     handleDrawerOpen = () => {
@@ -166,12 +167,6 @@ const styles = theme => ({
       this.setState({ anchorEl: event.currentTarget });
     };
 
-    handleLanguageMenuOpen = event => {
-        console.log("lang menu open");
-        this.setState({ anchorEl: event.currentTarget });
-      };
-  
-
     handleMenuClose = () => {
         this.setState({ anchorEl: null });
         this.handleMobileMenuClose();
@@ -183,14 +178,6 @@ const styles = theme => ({
 
     handleMobileMenuClose = () => {
         this.setState({ mobileMoreAnchorEl: null });
-    };
-
-    handleMobileMenuOpen2 = event => {
-        this.setState({ mobileMoreAnchorEl2: event.currentTarget });
-    };
-
-    handleMobileMenuClose2 = () => {
-        this.setState({ mobileMoreAnchorEl2: null });
     };
 
     render() {
