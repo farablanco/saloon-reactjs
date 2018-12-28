@@ -24,12 +24,13 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import classNames from 'classnames';
 import WithViewer from '../../WithViewer'
-//import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 //import Button from '@material-ui/core/Button';
 import GuestMenuItems from './GuestMenuItems'
 import UserMenuItems from './UserMenuItems'
 import SidemenuFunc from './SidemenuFunc'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Trans } from 'react-i18next';
 
 const drawerWidth = 240;
 
@@ -145,6 +146,10 @@ const styles = theme => ({
       margin: {
         margin: theme.spacing.unit,
       },
+      navLink: { 
+        textDecoration: 'none', 
+        color: 'white' 
+      },
   });
 
 
@@ -181,7 +186,7 @@ const styles = theme => ({
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme} = this.props;
         const { open } = this.state;
         const { anchorEl, mobileMoreAnchorEl } = this.state;
         const isMenuOpen = Boolean(anchorEl);
@@ -205,10 +210,12 @@ const styles = theme => ({
                 onClose={this.handleMobileMenuClose}
             >
                 <MenuItem>
-                <IconButton color="inherit">
-                    <FontAwesomeIcon icon="home" />
-                </IconButton>
-                <p>Home</p>
+                <NavLink to="/Home" exact className={classes.navLink}>
+                  <IconButton color="inherit">
+                      <FontAwesomeIcon icon="home" />
+                  </IconButton>
+                  <p>Home</p>
+                </NavLink>
                 </MenuItem>
                 <MenuItem>
                 <IconButton color="inherit">
@@ -250,7 +257,7 @@ const styles = theme => ({
                     <MenuIcon />
                   </IconButton>
                   <Typography variant="h6" color="inherit" noWrap>
-                    Reward Pts Admin
+                  <Trans>Reward Pts Admin</Trans>
                   </Typography>
                   <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -266,9 +273,11 @@ const styles = theme => ({
                 </div>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <IconButton color="inherit">
-                        <FontAwesomeIcon icon="home" />
-                    </IconButton>
+                    <NavLink to="/Home" exact className={classes.navLink}>
+                        <IconButton color="inherit">
+                            <FontAwesomeIcon icon="home" />
+                        </IconButton>
+                    </NavLink>
                     <IconButton color="inherit">
                     <Badge badgeContent={17} color="secondary">
                         <NotificationsIcon />

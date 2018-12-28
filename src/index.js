@@ -6,6 +6,7 @@ import './index.css';
 import App from './components/App';
 import 'typeface-roboto';
 import * as serviceWorker from './serviceWorker';
+import './i18n';
 
 Raven.config(process.env.REACT_APP_SENTRY_DSN).install()
 

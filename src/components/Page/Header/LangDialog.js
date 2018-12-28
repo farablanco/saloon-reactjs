@@ -12,7 +12,10 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
 import DialogContent from "@material-ui/core/DialogContent";
+import i18n from '../../../i18n';
+
 const languages = ["English", "中文"];
+const languageCodes = ["en", "zh"];
 
 const styles = {
   avatar: {
@@ -23,54 +26,67 @@ const styles = {
 
 class LanguageDialog extends React.Component {
   state = {
-    open: false,
-    selectedValue: "English"
+    openDialog: false,
+    selectedValueFromdialog: "English"
   };
 
   componentDidMount() {
+    console.log(">>> componentDidMount..." + this.state.openDialog);
     //setInterval(this.open, 1000);
   }
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleClose = value => {
+    console.log(">>> handleclose..." + this.state.openDialog);
+    this.setState({ openDialog: false, selectedValueFromdialog: value });
   };
+
+  handleEntered = () =>{
+    console.log(">>> handleEntered..." + this.state.openDialog);
+    this.refs.listOfLang.focus();
+  }
 
   handleListItemClick = value => {
+    console.log(">>> handleListItemClick..." + this.state.openDialog);
     this.setState({
-      open: false
+      openDialog: false,
+      selectedValueFromdialog: value
     });
-    this.props.onClose(value);
+    let selectedLangIndex = languages.indexOf(value);
+    console.log(languageCodes[selectedLangIndex]);
+    i18n.changeLanguage(languageCodes[selectedLangIndex]);
   };
 
-  handleLanguageMenuOpen = event => {
+  handleLanguageMenuOpen = () => {
     console.log(">>> lang menu open");
-    this.setState({ open: true });
+    this.setState({ openDialog: true });
   };
 
   render() {
     const { classes, ...other } = this.props;
     return (
+     
       <div>
         <Button
-          size="small"
-          variant="outlined"
-          color="primary"
+          className="nav-link"
           onClick={this.handleLanguageMenuOpen}
         >
           <FontAwesomeIcon icon="language" size="2x" />
-          &nbsp;Language &nbsp;{this.state.selectedValue}
+          &nbsp;Language &nbsp;{this.state.selectedValueFromdialog}
         </Button>
+        {this.state.openDialog && (
         <Dialog
           fullScreen
-          open={this.state.open}
-          aria-labelledby="confirmation-dialog-title"
+          open={this.state.openDialog}
+          aria-labelledby="simple-dialog-title"
+          onClose={this.handleClose}
+          onEntered={this.handleEntered}
           {...other}
         >
-          <DialogTitle id="confirmation-dialog-title">
+          <DialogTitle id="simple-dialog-title">
             {"Change language ?"}
           </DialogTitle>
           <DialogContent>
-            <div>
+            <div ref="listOfLang">
               <List>
                 {languages.map(lang => (
                   <ListItem
@@ -90,6 +106,7 @@ class LanguageDialog extends React.Component {
             </div>
           </DialogContent>
         </Dialog>
+        )}
       </div>
     );
   }

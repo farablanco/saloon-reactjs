@@ -23,21 +23,18 @@ class UserMenuItems extends React.Component {
       >
         <MenuItem>
           <ImageAvatars src={userA.image} className="user-pic" alt="" />
-          {userA.email}
-        </MenuItem>
-        <MenuItem onClick={menuClose}>
-          <NavLink to="/profile" exact className="nav-link">
+          
+          <NavLink to="/profile" exact className={classes.navLink}>
             <Button size="small" className={classes.margin}>
-              <FontAwesomeIcon icon="user" size="2x" />
-              &nbsp;My Account
+              &nbsp;{userA.email}
             </Button>
           </NavLink>
         </MenuItem>
-        <MenuItem onClick={menuClose}>
+        <MenuItem>
           <SimpleDialogWrapped />
         </MenuItem>
         <MenuItem onClick={menuClose}>
-          <NavLink to="/logout" exact className="nav-link">
+          <NavLink to="/logout" exact className={classes.navLink}>
             <Button size="small" className={classes.margin}>
               <FontAwesomeIcon icon="sign-out-alt" size="2x" />
               &nbsp;Logout
