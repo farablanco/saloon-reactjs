@@ -1,7 +1,7 @@
 import { Field, Formik } from 'formik'
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import FormErrors from '../FormErrors'
+import FormMessages from '../FormMessages'
 
 const SettingsForm = ({ user, onSubmit }) => (
   <Formik
@@ -16,7 +16,7 @@ const SettingsForm = ({ user, onSubmit }) => (
   >
     {({ handleSubmit, isSubmitting, errors }) => (
       <Fragment>
-        <FormErrors errors={errors} />
+        <FormMessages />
 
         <form onSubmit={handleSubmit}>
           <fieldset disabled={isSubmitting}>

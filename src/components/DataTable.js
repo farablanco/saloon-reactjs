@@ -13,6 +13,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePaginationActions from './TablePagination'
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
+import DataTableToolbar from './DataTableToolbar';
+import Checkbox from '@material-ui/core/Checkbox';
 
 /* eslint-disable graphql/template-strings */
 const CHANGE_FEED_FILTER = gql`
@@ -39,6 +41,16 @@ const styles = theme => ({
       flexWrap: 'wrap',
     },
   });
+
+  const CustomTableCell = withStyles(theme => ({
+    head: {
+      backgroundColor: theme.palette.common.white,
+      color: theme.palette.common.black,
+    },
+    body: {
+      fontSize: 14,
+    },
+  }))(TableCell);  
  
 class DataTable extends Component {
     state = {
@@ -48,6 +60,7 @@ class DataTable extends Component {
         page: 0,
         rowsPerPage: 15,
         activateScroll: 'hidden',
+        selected: [],
     }
 
     componentWillUnmount() {
@@ -81,72 +94,98 @@ class DataTable extends Component {
         window.addEventListener('resize', this.resize)
       }
 
-        render(){
-            const { classes , rows} = this.props;
-            const { rowsPerPage, page } = this.state;
+      handleSelectAllClick = event => {
+        if (event.target.checked) {
+          this.setState(state => ({ selected: state.rows.map(n => n.id) }));
+          return;
+        }
+        this.setState({ selected: [] });
+      };
 
-            //const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-            return (
-            
-            <Page title="Home" className="classes.mainPage">
-            <div style={{width: 'auto', overflowX: this.state.activateScroll}}>
-                <Table className={classes.table}>
-                    <TableHead>
-                    <TableRow className="classes.tableRow">
-                        <TableCell align="right">Employee Name</TableCell>
-                        <TableCell align="right">Customer Name</TableCell>
-                        <TableCell align="right">Booking Datetime</TableCell>
-                        <TableCell align="right">Status</TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                        return (
-                        <TableRow className="classes.tableRow" key={row.id}>
-                            <TableCell component="th" scope="row">
-                            {row.employee}
-                            </TableCell>
-                            <TableCell align="right">{row.customer}</TableCell>
-                            <TableCell align="right">{row.datetime}</TableCell>
-                            <TableCell align="right">{row.status}</TableCell>
-                        </TableRow>
-                        );
-                    })}
-                    {rows.length === 0 ? (
-                        <TableRow className="classes.tableRow">
-                            <TableCell colSpan={2}></TableCell>
-                            <TableCell align="center">No record found !</TableCell>
-                            <TableCell colSpan={2}></TableCell>
-                        </TableRow>
-                    ):(
-                        <Fragment/>
-                    )}
-                    </TableBody>
-                    
-                    <TableFooter>
-                        <TableRow>
-                        {rows.length > 0 ? (  
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            colSpan={4}
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                            native: true,
-                            }}
-                            onChangePage={this.handleChangePage}
-                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}/>
-                        ):(
-                            <Fragment/>
-                        )}
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-                </div>
-            </Page>
-        )
+      getStripedStyle(index) {
+        return { background: index % 2 ? '#fafafa' : 'white' };
+      }
+
+      isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+      render(){
+          const { classes , rows  } = this.props;
+          const { rowsPerPage, page } = this.state;
+
+          //const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+          return (
+          
+          <Page title="Home" className="classes.mainPage">
+          <div style={{width: 'auto', overflowX: this.state.activateScroll}}>
+              <DataTableToolbar numSelected={this.state.selected.length}/>
+              <Table className={classes.table}>
+                  <TableHead>
+                  <TableRow className="classes.tableRow">
+                      <TableCell style={{ width: "10%" }}>
+                        <Checkbox
+                          indeterminate={this.state.selected.length > 0 && this.state.selected.length < rows.length}
+                          checked={this.state.selected.length === rows.length}
+                          onChange={this.handleSelectAllClick}
+                        />
+                      </TableCell>
+                      <CustomTableCell align="right">Employee Name</CustomTableCell>
+                      <CustomTableCell align="right">Customer Name</CustomTableCell>
+                      <CustomTableCell align="right">Booking Datetime</CustomTableCell>
+                      <CustomTableCell align="right">Status</CustomTableCell>
+                  </TableRow>
+                  </TableHead>
+                  <TableBody>
+                  {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                      const isSelected = this.isSelected(row.id);
+                      return (
+                      <TableRow className="classes.tableRow" style={{ ...this.getStripedStyle(index) }} key={row.id}>
+                          <TableCell style={{ width: "10%" }}>
+                            <Checkbox checked={isSelected} />
+                          </TableCell>
+                          <CustomTableCell align="right">
+                          {row.employee}
+                          </CustomTableCell>
+                          <CustomTableCell align="right">{row.customer}</CustomTableCell>
+                          <CustomTableCell align="right">{row.datetime}</CustomTableCell>
+                          <CustomTableCell align="right">{row.status}</CustomTableCell>
+                      </TableRow>
+                      );
+                  })}
+                  {rows.length === 0 ? (
+                      <TableRow className="classes.tableRow">
+                          <TableCell colSpan={2}></TableCell>
+                          <TableCell align="center">No record found !</TableCell>
+                          <TableCell colSpan={2}></TableCell>
+                      </TableRow>
+                  ):(
+                      <Fragment/>
+                  )}
+                  </TableBody>
+                  
+                  <TableFooter>
+                      <TableRow>
+                      {rows.length > 0 ? (  
+                      <TablePagination
+                          rowsPerPageOptions={[5, 10, 25]}
+                          colSpan={4}
+                          count={rows.length}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          SelectProps={{
+                          native: true,
+                          }}
+                          onChangePage={this.handleChangePage}
+                          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                          ActionsComponent={TablePaginationActions}/>
+                      ):(
+                          <Fragment/>
+                      )}
+                      </TableRow>
+                  </TableFooter>
+              </Table>
+              </div>
+          </Page>
+      )
     }
 }
 

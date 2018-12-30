@@ -13,6 +13,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import httpClient from '../httpClient';
+import FormMessages from '../FormMessages';
+import { withGlobalState } from 'react-globally'
 
 const styles = theme => ({
   main: {
@@ -46,11 +48,12 @@ const styles = theme => ({
   },
 });
 
-
-
 class SignIn extends React.Component {
     state = {
-        fields: { email: '', password: ''}
+        fields: { email: '', password: ''},
+        hasError: false,
+        openError: false,
+        errorMessage: [],
       }
     
     onInputChange(evt) {
@@ -61,7 +64,7 @@ class SignIn extends React.Component {
             }
         })
     };
-    
+
     async onFormSubmit(evt) {
         evt.preventDefault()
         await httpClient.login(this.state.fields).then(user => {
@@ -70,12 +73,22 @@ class SignIn extends React.Component {
                 //this.props.onSignInSuccess(user)
                 this.props.history.push('/')
             }
+        }).catch((error)=>{
+          console.log("ERROR !" + JSON.stringify(error));
+          const errors = [];
+          errors.push({ errorMessage: error.response.data.message });
+          this.props.setGlobalState(prevGlobalState => ({
+            hasMessage: true,
+            messages: errors,
+            variant: "error"
+          }))
         })
-    };
+    }
 
     render() {
         const { classes } = this.props;
         const { email, password } = this.state.fields
+        console.log("ERROR !" + this.state.openError);
         return (
             <main className={classes.main}>
               <CssBaseline />
@@ -86,14 +99,15 @@ class SignIn extends React.Component {
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
-                <form className={classes.form} onChange={this.onInputChange.bind(this)} onSubmit={this.onFormSubmit.bind(this)}>
+                <form noValidate  className={classes.form} onChange={this.onInputChange.bind(this)} onSubmit={this.onFormSubmit.bind(this)}>
+                  <FormMessages />  
                   <FormControl margin="normal" required fullWidth>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
                     <Input id="email" name="email" autoComplete="email" value={email} autoFocus />
                   </FormControl>
                   <FormControl margin="normal" required fullWidth>
                     <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input name="password" type="password" id="password" value={password}  autoComplete="current-password" />
+                    <Input name="password" type="password" id="password" value={password}  autoComplete="password" />
                   </FormControl>
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
@@ -119,4 +133,4 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+export default withGlobalState(withStyles(styles)(SignIn));
