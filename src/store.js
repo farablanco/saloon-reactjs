@@ -1,6 +1,7 @@
 const store = {
     hasMessage: false,
     variant: "success",
-    messages: []
+    messages: [],
+    isLoggedIn: false,
 };
 export default store;

@@ -9,12 +9,20 @@ import * as serviceWorker from './serviceWorker';
 import './i18n';
 import { Provider } from 'react-globally'
 import store from './store'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+const theme = createMuiTheme({
+    typography: {
+      useNextVariants: true,
+    },
+});
 
 Raven.config(process.env.REACT_APP_SENTRY_DSN).install()
 
 ReactDOM.render(
     <Provider globalState={store}>
-        <App />
+        <MuiThemeProvider theme={theme}>
+            <App />
+        </MuiThemeProvider>
     </Provider>    
 , document.getElementById('root'))
 

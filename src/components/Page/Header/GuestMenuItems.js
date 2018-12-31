@@ -4,12 +4,13 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import SimpleDialogWrapped from "./LangDialog";
 
 class GuestMenuItems extends React.Component {
 
     render() {
         const { anchorEl, isMenuOpen, menuClose , classes} = this.props;
-        
+        console.log("GuestMenuItems > isMenuOpen >"  + isMenuOpen);
         return (
             <Menu
               anchorEl={anchorEl}
@@ -25,19 +26,15 @@ class GuestMenuItems extends React.Component {
                         </Button>
                     </NavLink>
                 </MenuItem>
-                <MenuItem onClick={menuClose}>
+                <MenuItem>
                     <NavLink to="/register" className="nav-link">
                         <Button size="small" className={classes.margin}>
                             <FontAwesomeIcon icon="user" size="2x"/>&nbsp;Sign up 
                         </Button> 
                     </NavLink>
                 </MenuItem>
-                <MenuItem onClick={menuClose}>
-                    <NavLink to="/changeLanguage" className="nav-link">
-                        <Button size="small" className={classes.margin}>
-                            <FontAwesomeIcon icon="language" size="2x"/>&nbsp;Language
-                        </Button> 
-                    </NavLink>
+                <MenuItem >
+                    <SimpleDialogWrapped />
                 </MenuItem>
             </Menu>
         );

@@ -70,7 +70,9 @@ class SignIn extends React.Component {
         await httpClient.login(this.state.fields).then(user => {
             this.setState({ fields: { email: '', password: '' } })
             if(user) {
-                //this.props.onSignInSuccess(user)
+                this.props.setGlobalState(prevGlobalState => ({
+                  isLoggedIn: true,
+                }))
                 this.props.history.push('/')
             }
         }).catch((error)=>{
@@ -83,6 +85,10 @@ class SignIn extends React.Component {
             variant: "error"
           }))
         })
+    }
+
+    goBack(){
+      this.props.history.push('/')
     }
 
     render() {
@@ -121,6 +127,16 @@ class SignIn extends React.Component {
                     className={classes.submit}
                   >
                     Sign in
+                  </Button>
+                  <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    className={classes.submit}
+                    onClick={this.goBack.bind(this)}
+                  >
+                    Cancel
                   </Button>
                 </form>
               </Paper>

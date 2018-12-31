@@ -107,7 +107,7 @@ const styles = theme => ({
 
 class FormMessages extends React.Component {
   state = {
-    errorMessage: 'dddd', 
+    errorMessage: 'error message', 
   }
 
   handleClose(){
@@ -129,7 +129,7 @@ class FormMessages extends React.Component {
             <Snackbar
               anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'center',
+                horizontal: 'right',
               }}
               open={globalState.hasMessage}
               autoHideDuration={6000}

@@ -1,17 +1,10 @@
-import gql from 'graphql-tag'
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/core/styles';
 import DataTable  from '../DataTable';
+import Page from '../Page'
 
 /* eslint-disable graphql/template-strings */
 
-const CHANGE_FEED_FILTER = gql`
-  mutation ChangeFeedFilter($type: String) {
-    changeFeedFilter(type: $type) @client
-  }
-`
 /* eslint-enable */
 const styles = theme => ({
     root: {
@@ -51,26 +44,14 @@ class Home extends Component {
         
     }
 
-  componentWillUnmount() {
-    const { client } = this.props
-
-    client.mutate({
-      mutation: CHANGE_FEED_FILTER,
-      variables: { type: null }
-    })
-  }
-
   render() {
     return (
-      <DataTable rows={this.state.rows} />
+      <Page title="Home" className="classes.mainPage">
+        <DataTable rows={this.state.rows} />
+      </Page>
     )
   }
 }
 
-Home.propTypes = {
-  client: PropTypes.shape({
-    mutate: PropTypes.func.isRequired
-  }).isRequired
-}
 
-export default withApollo(withStyles(styles)(Home))
+export default withStyles(styles)(Home)

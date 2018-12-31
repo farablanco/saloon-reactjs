@@ -1,5 +1,5 @@
 //import { NavLink } from 'react-router-dom'
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -31,6 +31,7 @@ import UserMenuItems from './UserMenuItems'
 import SidemenuFunc from './SidemenuFunc'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Trans } from 'react-i18next';
+import { withGlobalState } from 'react-globally'
 
 const drawerWidth = 240;
 
@@ -185,21 +186,30 @@ const styles = theme => ({
         this.setState({ mobileMoreAnchorEl: null });
     };
 
+    componentWillReceiveProps(props) {
+      console.log("componentWillReceiveProps ???")
+    }
+
     render() {
-        const { classes, theme} = this.props;
-        const { open } = this.state;
-        const { anchorEl, mobileMoreAnchorEl } = this.state;
+        const { classes, theme, globalState} = this.props;
+        const { open, anchorEl, mobileMoreAnchorEl } = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+        console.log("isLoggedIn ? " + globalState.isLoggedIn)
         
         const renderMenu = (
-            <WithViewer>
-            {user => (
-                user ? <UserMenuItems classes={classes} userA={user} menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/> :  <GuestMenuItems classes={classes} menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/>
-            )}
-            </WithViewer>
-            
-          );
+            <Fragment>
+            {
+                globalState.isLoggedIn ? (
+                  <WithViewer>
+                  {viewer => (
+                      viewer? <UserMenuItems classes={classes}  userA={viewer} menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/> :<GuestMenuItems classes={classes}  menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/>
+                  )}
+                  </WithViewer>
+                ): 
+                  <GuestMenuItems classes={classes}  menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/>
+              }</Fragment>
+        );
     
         const renderMobileMenu = (
             <Menu
@@ -229,11 +239,16 @@ const styles = theme => ({
                 <IconButton color="inherit">
                     <AccountCircle />
                 </IconButton>
-                <WithViewer>
-                {viewer => (
-                    viewer ? <UserMenuItems classes={classes}  userA={viewer} menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/> : <GuestMenuItems classes={classes}  menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/>
-                )}
-                </WithViewer>
+                {globalState.isLoggedIn ?(
+                    <WithViewer>
+                    {viewer => (
+                         viewer ? <UserMenuItems classes={classes}  userA={viewer} menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/> : <GuestMenuItems classes={classes}  menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/>
+                    )}
+                    </WithViewer>
+                    ): 
+                    <GuestMenuItems classes={classes}  menuClose={this.handleMenuClose} isMenuOpen={isMenuOpen} anchorEl={anchorEl}/>
+                }
+                
                 </MenuItem>
             </Menu>
         );
@@ -329,4 +344,4 @@ Header.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Header);
+export default withGlobalState(withStyles(styles, { withTheme: true })(Header));

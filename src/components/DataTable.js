@@ -1,8 +1,7 @@
-import gql from 'graphql-tag'
+//import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React, { Component, Fragment } from 'react'
 import { withApollo } from 'react-apollo'
-import Page from './Page'
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,18 +9,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 //import Paper from '@material-ui/core/Paper';
-import TablePaginationActions from './TablePagination'
+//import TablePaginationActions from './TablePagination'
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import DataTableToolbar from './DataTableToolbar';
 import Checkbox from '@material-ui/core/Checkbox';
 
-/* eslint-disable graphql/template-strings */
-const CHANGE_FEED_FILTER = gql`
-  mutation ChangeFeedFilter($type: String) {
-    changeFeedFilter(type: $type) @client
-  }
-`
 /* eslint-enable */
 const styles = theme => ({
     root: {
@@ -64,15 +57,8 @@ class DataTable extends Component {
     }
 
     componentWillUnmount() {
-        const { client } = this.props
-    
-        client.mutate({
-          mutation: CHANGE_FEED_FILTER,
-          variables: { type: null }
-        })
-    
         window.removeEventListener('resize', this.resize)
-      }
+    }
     
       handleChangePage = (event, page) => {
         this.setState({ page });
@@ -114,8 +100,6 @@ class DataTable extends Component {
 
           //const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
           return (
-          
-          <Page title="Home" className="classes.mainPage">
           <div style={{width: 'auto', overflowX: this.state.activateScroll}}>
               <DataTableToolbar numSelected={this.state.selected.length}/>
               <Table className={classes.table}>
@@ -166,17 +150,20 @@ class DataTable extends Component {
                       <TableRow>
                       {rows.length > 0 ? (  
                       <TablePagination
-                          rowsPerPageOptions={[5, 10, 25]}
+                          rowsPerPageOptions={[10, 25, 50]}
                           colSpan={4}
                           count={rows.length}
                           rowsPerPage={rowsPerPage}
                           page={page}
-                          SelectProps={{
-                          native: true,
+                          backIconButtonProps={{
+                            'aria-label': 'Previous Page',
+                          }}
+                          nextIconButtonProps={{
+                            'aria-label': 'Next Page',
                           }}
                           onChangePage={this.handleChangePage}
                           onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                          ActionsComponent={TablePaginationActions}/>
+                          />
                       ):(
                           <Fragment/>
                       )}
@@ -184,7 +171,6 @@ class DataTable extends Component {
                   </TableFooter>
               </Table>
               </div>
-          </Page>
       )
     }
 }

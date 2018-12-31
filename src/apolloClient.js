@@ -26,10 +26,12 @@ const client = new ApolloClient({
   uri: GRAPHQL_URL,
   request: (operation) => {
     const token = tokenStorage.read()
-    //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6ZmFsc2UsImV4cCI6MTU0NTIxNjg4NiwibmFtZSI6ImJ1bm55cHBsQHlhaG9vLmNvbSJ9.HYjTtGaNsuh_pPYBByeqFWzcQHDho5drKFCjq6NuLi4"
+    console.log("TOKEN ! :" + token)
     let headers = { 'Content-Type': "application/json"}
     if (token) {
       headers = { authorization: `Bearer ${token}` }
+    }else{
+      
     }
     operation.setContext({ headers })
   },
