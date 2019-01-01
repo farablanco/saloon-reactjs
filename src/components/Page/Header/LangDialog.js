@@ -13,6 +13,7 @@ import { withStyles } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
 import DialogContent from "@material-ui/core/DialogContent";
 import i18n from '../../../i18n';
+import { withGlobalState } from 'react-globally'
 
 const languages = ["English", "中文"];
 const languageCodes = ["en", "zh"];
@@ -25,14 +26,15 @@ const styles = {
 };
 
 class LanguageDialog extends React.Component {
+  
   state = {
     openDialog: false,
-    selectedValueFromdialog: "English"
+    selectedValueFromdialog: this.props.globalState.language,
+    selectedValueDesc: this.props.globalState.languageDesc
   };
 
   componentDidMount() {
     console.log(">>> componentDidMount..." + this.state.openDialog);
-    //setInterval(this.open, 1000);
   }
 
   handleClose = value => {
@@ -53,6 +55,10 @@ class LanguageDialog extends React.Component {
     });
     let selectedLangIndex = languages.indexOf(value);
     console.log(languageCodes[selectedLangIndex]);
+    this.props.setGlobalState(prevGlobalState => ({
+      language: languageCodes[selectedLangIndex],
+      languageDesc: value
+    }))
     i18n.changeLanguage(languageCodes[selectedLangIndex]);
   };
 
@@ -71,7 +77,7 @@ class LanguageDialog extends React.Component {
           onClick={this.handleLanguageMenuOpen}
         >
           <FontAwesomeIcon icon="language" size="2x" />
-          &nbsp;Language &nbsp;{this.state.selectedValueFromdialog}
+          &nbsp;Language &nbsp;{this.state.selectedValueDesc}
         </Button>
         {this.state.openDialog && (
         <Dialog
@@ -116,5 +122,5 @@ LanguageDialog.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-const SimpleDialogWrapped = withStyles(styles)(LanguageDialog);
+const SimpleDialogWrapped = withGlobalState(withStyles(styles)(LanguageDialog));
 export default SimpleDialogWrapped;
