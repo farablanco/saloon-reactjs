@@ -57,7 +57,7 @@ class DataTable extends Component {
   };
 
   resize = () => {
-    if (window.innerWidth <= 760) {
+    if (window.innerWidth <= 943) {
       this.setState({ activateScroll: "scroll" });
     } else {
       this.setState({ activateScroll: "hidden" });
@@ -79,12 +79,19 @@ class DataTable extends Component {
   render() {
     const { classes, rows, header, columns } = this.props;
     const { rowsPerPage, page } = this.state;
-
+    console.log(rows.length)
     //const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
     return (
       <div style={{ width: "auto", overflowX: this.state.activateScroll }}>
-        <DataTableToolbar numSelected={this.state.selected.length} />
+        { rows.length <= 0 ? (
+          <Fragment></Fragment>
+        ):(
+          <DataTableToolbar numSelected={this.state.selected.length} />
+        )}
         <Table className={classes.table}>
+        { rows.length <= 0 ? (
+          <Fragment></Fragment>
+        ):(
           <TableHead>
             <TableRow className="classes.tableRow">
               <TableCell style={{ width: "10%" }}>
@@ -100,6 +107,8 @@ class DataTable extends Component {
               {header}
             </TableRow>
           </TableHead>
+        )}
+          
           <TableBody>{columns}</TableBody>
 
           <TableFooter>
